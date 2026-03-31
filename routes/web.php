@@ -30,3 +30,14 @@ Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movies.show');
 
 Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::middleware(['auth', 'not_blocked', 'role:admin'])->get('/admin-only-test', function () {
+    return 'Доступ только для администратора';
+});
+
+Route::middleware(['auth', 'not_blocked', 'role:editor,admin'])->get('/editor-only-test', function () {
+    return 'Доступ для редактора или администратора';
+});
+
+Route::middleware(['auth', 'not_blocked', 'permission:user.manage'])->get('/permission-test', function () {
+    return 'Есть право user.manage';
+});

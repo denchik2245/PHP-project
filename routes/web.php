@@ -41,3 +41,20 @@ Route::middleware(['auth', 'not_blocked', 'role:editor,admin'])->get('/editor-on
 Route::middleware(['auth', 'not_blocked', 'permission:user.manage'])->get('/permission-test', function () {
     return 'Есть право user.manage';
 });
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'not_blocked', 'role:admin'])
+    ->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('dashboard');
+
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::post('/users/{user}/toggle-block', [\App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle-block');
+        Route::post('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.update-role');
+        Route::get('/movies', [\App\Http\Controllers\Admin\MovieAdminController::class, 'index'])->name('movies.index');
+        Route::get('/movies/create', [\App\Http\Controllers\Admin\MovieAdminController::class, 'create'])->name('movies.create');
+        Route::post('/movies', [\App\Http\Controllers\Admin\MovieAdminController::class, 'store'])->name('movies.store');
+        Route::get('/movies/{movie}/edit', [\App\Http\Controllers\Admin\MovieAdminController::class, 'edit'])->name('movies.edit');
+        Route::post('/movies/{movie}', [\App\Http\Controllers\Admin\MovieAdminController::class, 'update'])->name('movies.update');
+        Route::post('/movies/{movie}/delete', [\App\Http\Controllers\Admin\MovieAdminController::class, 'destroy'])->name('movies.destroy');
+    });

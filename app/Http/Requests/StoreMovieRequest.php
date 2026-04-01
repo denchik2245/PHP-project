@@ -2,14 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreMovieRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->hasRole('admin');
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        return $user?->hasRole('admin') ?? false;
     }
 
     public function rules(): array

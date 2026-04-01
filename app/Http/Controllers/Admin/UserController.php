@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -26,7 +27,8 @@ class UserController extends Controller
 
     public function toggleBlock(User $user): RedirectResponse
     {
-        if (auth()->id() === $user->id) {
+        // Нельзя заблокировать самого себя
+        if (Auth::id() === $user->id) {
             return back()->with('error', 'Нельзя заблокировать самого себя.');
         }
 
@@ -36,7 +38,9 @@ class UserController extends Controller
 
         return back()->with(
             'success',
-            $user->is_blocked ? 'Пользователь заблокирован.' : 'Пользователь разблокирован.'
+            $user->is_blocked
+                ? 'Пользователь заблокирован.'
+                : 'Пользователь разблокирован.'
         );
     }
 

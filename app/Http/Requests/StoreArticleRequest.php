@@ -2,14 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreArticleRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->hasAnyRole(['author', 'admin']);
+        $user = Auth::user();
+
+        return $user instanceof User
+            && $user->hasAnyRole(['author', 'admin']);
     }
 
     public function rules(): array

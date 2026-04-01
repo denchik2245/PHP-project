@@ -19,6 +19,7 @@ class ProfileController extends Controller
 
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $data = $request->validated();

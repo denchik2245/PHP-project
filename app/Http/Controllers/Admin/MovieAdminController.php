@@ -9,6 +9,7 @@ use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MovieAdminController extends Controller
@@ -25,7 +26,9 @@ class MovieAdminController extends Controller
 
     public function create(): View
     {
-        $genres = Genre::query()->orderBy('name')->get();
+        $genres = Genre::query()
+            ->orderBy('name')
+            ->get();
 
         return view('admin.movies.create', compact('genres'));
     }
@@ -41,7 +44,7 @@ class MovieAdminController extends Controller
 
         unset($data['poster'], $data['genres']);
 
-        $data['created_by'] = auth()->id();
+        $data['created_by'] = Auth::id();
 
         $movie = Movie::query()->create($data);
         $movie->genres()->sync($genreIds);
@@ -54,7 +57,10 @@ class MovieAdminController extends Controller
     public function edit(Movie $movie): View
     {
         $movie->load('genres');
-        $genres = Genre::query()->orderBy('name')->get();
+
+        $genres = Genre::query()
+            ->orderBy('name')
+            ->get();
 
         return view('admin.movies.edit', compact('movie', 'genres'));
     }

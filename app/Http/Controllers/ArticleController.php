@@ -6,6 +6,7 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
 use App\Models\Movie;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,10 @@ class ArticleController extends Controller
     {
         $user = Auth::user();
 
+        if (! $user instanceof User) {
+            abort(403);
+        }
+
         $articles = Article::query()
             ->where('author_id', $user->id)
             ->with('movie')
@@ -38,11 +43,15 @@ class ArticleController extends Controller
 
     public function create(): View
     {
-        if (! Auth::user()->hasAnyRole(['author', 'admin'])) {
+        $user = Auth::user();
+
+        if (! $user instanceof User || ! $user->hasAnyRole(['author', 'admin'])) {
             abort(403);
         }
 
-        $movies = Movie::query()->orderBy('title')->get();
+        $movies = Movie::query()
+            ->orderBy('title')
+            ->get();
 
         return view('articles.create', compact('movies'));
     }
@@ -64,6 +73,10 @@ class ArticleController extends Controller
     {
         $user = Auth::user();
 
+        if (! $user instanceof User) {
+            abort(403);
+        }
+
         if ($article->author_id !== $user->id && ! $user->hasRole('admin')) {
             abort(403);
         }
@@ -72,7 +85,9 @@ class ArticleController extends Controller
             abort(403, 'Опубликованную статью нельзя редактировать автору.');
         }
 
-        $movies = Movie::query()->orderBy('title')->get();
+        $movies = Movie::query()
+            ->orderBy('title')
+            ->get();
 
         return view('articles.edit', compact('article', 'movies'));
     }
@@ -80,6 +95,10 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request, Article $article): RedirectResponse
     {
         $user = Auth::user();
+
+        if (! $user instanceof User) {
+            abort(403);
+        }
 
         if ($article->author_id !== $user->id && ! $user->hasRole('admin')) {
             abort(403);

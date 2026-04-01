@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ModerationController extends Controller
 {
@@ -25,7 +26,7 @@ class ModerationController extends Controller
         $article->update([
             'status' => 'published',
             'published_at' => Carbon::now(),
-            'published_by' => auth()->id(),
+            'published_by' => Auth::id(),
         ]);
 
         return back()->with('success', 'Статья опубликована.');

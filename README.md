@@ -455,6 +455,35 @@ API (необязательно).
 
 ---
 
+# Интерфейс
+
+Главная страница для неавторизованного пользователя
+<img width="1386" height="920" alt="image" src="https://github.com/user-attachments/assets/7af62f95-82ac-48c4-849c-ab0cf9f5631a" />
+
+Модерация статей (вход под админом)
+<img width="1376" height="918" alt="image" src="https://github.com/user-attachments/assets/645367b1-be71-4c35-a9d9-fa32e84f7930" />
+
+Админка с пользователями (вход под админом)
+<img width="1469" height="918" alt="image" src="https://github.com/user-attachments/assets/19bbc090-766a-4a2c-9534-e3a4fdec23fe" />
+
+Редактирование профиля
+<img width="1323" height="612" alt="image" src="https://github.com/user-attachments/assets/f230e886-f32c-4d19-93d5-affb8b8a4e77" />
+
+Возможность загрузки фото
+<img width="1231" height="811" alt="image" src="https://github.com/user-attachments/assets/9a4ee609-c924-43d0-a379-ed022b8a5134" />
+
+Модерация статей (вход под эдитором)
+<img width="1285" height="915" alt="image" src="https://github.com/user-attachments/assets/027c81eb-cd1c-48f3-b594-5c0781be88b4" />
+
+Статья снята с публикации
+<img width="1386" height="759" alt="image" src="https://github.com/user-attachments/assets/40a21a4d-2d04-451d-9c1c-8ec3de6972e7" />
+
+Страница фильма
+<img width="1322" height="868" alt="image" src="https://github.com/user-attachments/assets/1c09af56-1be3-4073-929c-8d0c44b8a3de" />
+
+
+---
+
 # Архитектура
 
 Проект построен по принципам:
@@ -487,4 +516,5 @@ API (необязательно).
 * Сидеры с начальными данными
 * Модерация статей для редактора и администратора
 * Обработка ошибок и демонстрация HTTP-кодов
+
 

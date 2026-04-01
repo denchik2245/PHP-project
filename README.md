@@ -22,7 +22,6 @@
 * PHP (Laravel)
 * Composer (PSR-4 автозагрузка)
 * Blade (шаблонизатор)
-* MySQL / SQLite / PostgreSQL (через PDO)
 * Laravel Service Container (DI)
 
 ---
@@ -31,18 +30,24 @@
 
 ```bash
 git clone <repo>
-cd movie-catalog
+cd film-catalog
 
-composer install
+Проверить, что все компоненты установлены
+php -v
+composer --version
+node -v
+npm -v
+laravel --version
 
-cp .env.example .env
+Открыть файл php.ini, убрать ; у строк: extension=zip, extension=fileinfo, extension=pdo_sqlite, extension=sqlite3
+
+Ввести команды:
+attrib bootstrap\cache
+attrib -R bootstrap\cache
+attrib bootstrap\cache
+
 php artisan key:generate
-
-php artisan migrate
-php artisan db:seed
-
-php artisan storage:link
-
+php artisan optimize:clear
 php artisan serve
 ```
 

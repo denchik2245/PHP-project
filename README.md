@@ -1,58 +1,498 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Movie Catalog
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Описание проекта
 
-## About Laravel
+Данный проект представляет собой веб-приложение **каталога фильмов** с возможностью публикации статей (обзоров) с разграничением прав доступа (RBAC).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Проект разработан в рамках учебного задания и реализует:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* авторизацию и регистрацию пользователей;
+* роли и права (RBAC);
+* каталог фильмов;
+* статьи/обзоры с модерацией;
+* загрузку файлов (аватары, постеры);
+* обработку ошибок;
+* middleware;
+* модульную архитектуру через Composer.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ⚙️ Технологии
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* PHP (Laravel)
+* Composer (PSR-4 автозагрузка)
+* Blade (шаблонизатор)
+* MySQL / SQLite / PostgreSQL (через PDO)
+* Laravel Service Container (DI)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🚀 Установка проекта
 
 ```bash
-composer require laravel/boost --dev
+git clone <repo>
+cd movie-catalog
 
-php artisan boost:install
+composer install
+
+cp .env.example .env
+php artisan key:generate
+
+php artisan migrate
+php artisan db:seed
+
+php artisan storage:link
+
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🔐 Роли пользователей
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Роль          | Возможности                              |
+| ------------- | ---------------------------------------- |
+| Гость         | Просмотр фильмов и опубликованных статей |
+| Автор         | Создание и редактирование своих статей   |
+| Редактор      | Публикация и снятие с публикации         |
+| Администратор | Управление пользователями и ролями       |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📁 Структура проекта
 
-## Security Vulnerabilities
+Ниже описана каждая папка и файл.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+# 📦 Корень проекта
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### `composer.json`
+
+Главный файл зависимостей.
+
+* подключает Laravel;
+* настраивает автозагрузку (PSR-4);
+* подключает локальные модули (`packages/`).
+
+---
+
+### `.env`
+
+Файл конфигурации окружения.
+
+* подключение к базе данных;
+* настройки приложения;
+* режим debug.
+
+---
+
+### `artisan`
+
+CLI-инструмент Laravel.
+Используется для:
+
+* миграций;
+* тестов;
+* запуска сервера;
+* генерации файлов.
+
+---
+
+### `README.md`
+
+Документация проекта (этот файл).
+
+---
+
+# 📂 app/ — Основная логика приложения
+
+## `app/Exceptions/`
+
+Обработка ошибок.
+
+* кастомные исключения;
+* настройка вывода ошибок (403, 404, 500).
+
+---
+
+## `app/Http/`
+
+### `Controllers/`
+
+Контроллеры — принимают запрос и вызывают бизнес-логику.
+
+Примеры:
+
+* `HomeController` — главная страница
+* `AuthController` — вход/регистрация
+* `ProfileController` — профиль пользователя
+* `MovieController` — работа с фильмами
+* `ArticleController` — работа со статьями
+* `Admin/*` — админка
+
+---
+
+### `Middleware/`
+
+Промежуточные слои обработки запросов.
+
+Примеры:
+
+* проверка авторизации;
+* проверка роли;
+* проверка блокировки пользователя;
+* обработка заголовков (`Content-Type`, `Accept`).
+
+---
+
+### `Requests/`
+
+Классы валидации форм.
+
+Примеры:
+
+* `LoginRequest`
+* `RegisterRequest`
+* `StoreMovieRequest`
+* `StoreArticleRequest`
+
+Отвечают за проверку входящих данных.
+
+---
+
+## `app/Models/`
+
+Модели базы данных.
+
+Примеры:
+
+* `User`
+* `Role`
+* `Permission`
+* `Movie`
+* `Genre`
+* `Article`
+
+Работают с БД через ORM Laravel (Eloquent).
+
+---
+
+## `app/Providers/`
+
+Сервис-провайдеры.
+
+Отвечают за:
+
+* регистрацию сервисов;
+* биндинг зависимостей;
+* подключение пакетов.
+
+---
+
+## `app/Services/`
+
+Бизнес-логика приложения.
+
+Примеры:
+
+* `AuthService` — логика входа
+* `MovieService` — работа с фильмами
+* `ArticleService` — статьи
+* `FileService` — загрузка файлов
+* `RoleService` — роли и права
+
+---
+
+# ⚙️ bootstrap/
+
+### `bootstrap/app.php`
+
+Запуск приложения Laravel.
+
+---
+
+# ⚙️ config/
+
+Файлы конфигурации.
+
+Примеры:
+
+* `app.php` — настройки приложения
+* `database.php` — подключение к БД
+* `auth.php` — авторизация
+* `filesystems.php` — работа с файлами
+
+---
+
+# 🗄 database/
+
+## `migrations/`
+
+Миграции базы данных.
+Создают таблицы:
+
+* users
+* roles
+* permissions
+* movies
+* articles
+* genres
+
+---
+
+## `seeders/`
+
+Начальные данные:
+
+* роли;
+* тестовые пользователи;
+* фильмы;
+* статьи.
+
+---
+
+## `factories/`
+
+Генерация тестовых данных (для тестов).
+
+---
+
+# 📦 packages/ — Модульная система
+
+Каждый модуль — отдельный Composer-пакет.
+
+---
+
+## `Core/`
+
+Общее ядро:
+
+* базовые классы;
+* обработка ошибок;
+* утилиты.
+
+---
+
+## `Users/`
+
+Пользователи:
+
+* регистрация;
+* вход;
+* профиль.
+
+---
+
+## `Access/`
+
+Права доступа:
+
+* роли;
+* permissions;
+* RBAC;
+* middleware доступа.
+
+---
+
+## `Movies/`
+
+Фильмы:
+
+* CRUD;
+* жанры;
+* постеры.
+
+---
+
+## `Articles/`
+
+Статьи:
+
+* создание;
+* редактирование;
+* публикация;
+* черновики.
+
+---
+
+## `Media/`
+
+Файлы:
+
+* загрузка;
+* валидация;
+* хранение;
+* генерация ссылок.
+
+---
+
+### 📁 Структура каждого пакета
+
+```
+package/
+├── composer.json
+├── src/
+│   ├── Controllers/
+│   ├── Models/
+│   ├── Services/
+│   ├── Providers/
+│   ├── routes/
+│   └── views/
+```
+
+---
+
+# 🌐 public/
+
+### `index.php`
+
+Точка входа в приложение.
+
+---
+
+### `storage/`
+
+Публичные файлы:
+
+* аватары;
+* постеры.
+
+---
+
+# 🎨 resources/
+
+## `views/`
+
+Blade-шаблоны.
+
+Структура:
+
+* `layouts/` — общий шаблон
+* `auth/` — вход/регистрация
+* `profile/` — профиль
+* `movies/` — фильмы
+* `articles/` — статьи
+* `admin/` — админка
+* `errors/` — страницы ошибок
+
+---
+
+## `css/` и `js/`
+
+Стили и скрипты.
+
+---
+
+# 🛣 routes/
+
+### `web.php`
+
+Публичные страницы:
+
+* главная;
+* фильмы;
+* статьи.
+
+---
+
+### `auth.php`
+
+Авторизация:
+
+* вход;
+* регистрация;
+* выход.
+
+---
+
+### `admin.php`
+
+Админка:
+
+* пользователи;
+* роли;
+* модерация.
+
+---
+
+### `api.php`
+
+API (необязательно).
+
+---
+
+# 📂 storage/
+
+### `app/public/avatars/`
+
+Аватары пользователей.
+
+### `app/public/posters/`
+
+Постеры фильмов.
+
+### `logs/`
+
+Логи ошибок.
+
+---
+
+# 🧪 tests/
+
+## `Feature/`
+
+Тесты сценариев:
+
+* регистрация;
+* вход;
+* доступ по ролям.
+
+---
+
+## `Unit/`
+
+Тесты логики:
+
+* сервисы;
+* RBAC;
+* валидация.
+
+---
+
+# 🔑 Основные функции проекта
+
+✔ Регистрация и авторизация
+✔ Роли и права (RBAC)
+✔ CRUD фильмов
+✔ CRUD статей
+✔ Модерация публикаций
+✔ Загрузка файлов
+✔ Личный кабинет
+✔ Админка
+✔ Обработка ошибок
+✔ Middleware
+✔ Тесты
+
+---
+
+# 👥 Командная работа
+
+Каждый участник отвечает за отдельный модуль:
+
+* Users
+* Access
+* Movies
+* Articles
+* Media / Infrastructure
+
+---
+
+# 📊 Архитектура
+
+Проект построен по принципам:
+
+* MVC (Model-View-Controller)
+* DI (Dependency Injection)
+* Модульная архитектура через Composer
+* Разделение ответственности (SRP)

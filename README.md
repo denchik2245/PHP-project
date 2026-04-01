@@ -481,6 +481,14 @@ API (необязательно).
 Страница фильма
 <img width="1322" height="868" alt="image" src="https://github.com/user-attachments/assets/1c09af56-1be3-4073-929c-8d0c44b8a3de" />
 
+Ошибка 403
+<img width="1303" height="374" alt="image" src="https://github.com/user-attachments/assets/42ab2b71-7a39-4b2d-8703-293304e46df6" />
+
+Ошибка 404
+<img width="1285" height="375" alt="image" src="https://github.com/user-attachments/assets/97e77f60-cb63-48bc-a210-69173a756fec" />
+
+Ошибка 500
+<img width="1310" height="374" alt="image" src="https://github.com/user-attachments/assets/9424b8fb-df8d-499e-b82f-97ce494d12e7" />
 
 ---
 
